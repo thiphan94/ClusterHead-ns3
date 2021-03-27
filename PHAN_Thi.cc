@@ -40,7 +40,7 @@ int main (int argc, char *argv[])
 		i = j;
 		for (i = j; i < j+9; ++i)
 		{
-				devices = pointToPoint.Install(nodes.Get(i), nodes.Get(cluster));
+			devices = pointToPoint.Install(nodes.Get(i), nodes.Get(cluster));
 		}
 		j += 10;
 		cluster +=10;
