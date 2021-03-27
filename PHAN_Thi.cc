@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
 	bool verbose = true;
 	int i;
 	int j = 1;
-	int cluster = 0;
+	int node_cluster = 0;
 	if (verbose)
 	{
 		LogComponentEnable ("UdpEchoClientApplication", LOG_LEVEL_INFO);
@@ -40,10 +40,10 @@ int main (int argc, char *argv[])
 		i = j;
 		for (i = j; i < j+9; ++i)
 		{
-			devices = pointToPoint.Install(nodes.Get(i), nodes.Get(cluster));
+			devices = pointToPoint.Install(nodes.Get(i), nodes.Get(node_cluster));
 		}
 		j += 10;
-		cluster +=10;
+		node_cluster +=10;
 
 	}
 
