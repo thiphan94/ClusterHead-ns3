@@ -25,7 +25,7 @@ int main (int argc, char *argv[])
 	}
 
 
-	//Create 50 nodes
+	//Creer 50 nodes
 	NodeContainer nodes;
 	nodes.Create(50);
 
@@ -34,26 +34,28 @@ int main (int argc, char *argv[])
 	pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("5Mbps"));
 	pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
 
-
-	NetDeviceContainer devices;
-	for (int k = 1; k < 6; ++k){
-		i = j;
-		for (i = j; i < j+9; ++i)
-		{
-			devices = pointToPoint.Install(nodes.Get(i), nodes.Get(node_cluster));
-		}
-		j += 10;
-		node_cluster +=10;
-
-	}
-
 	InternetStackHelper stack;
 	stack.Install (nodes);
 
 	Ipv4AddressHelper address;
 	address.SetBase ("10.1.1.0", "255.255.255.0");
 
-	Ipv4InterfaceContainer interfaces = address.Assign (devices);
+	NetDeviceContainer devices;
+	Ipv4InterfaceContainer interfaces;
+
+	//5 groupes, chaque groupe 10 noeuds dont 1 cluster head et 9 noeuds de membre
+	//cluster head: noeuds 0, 10, 20, 30, 40
+	for (int k = 1; k < 6; ++k){
+		i = j;
+		for (i = j; i < j+9; ++i)
+		{
+			devices = pointToPoint.Install(nodes.Get(i), nodes.Get(node_cluster));
+			interfaces = address.Assign (devices);
+		}
+		j += 10;
+		node_cluster +=10;
+
+	}
 
 	UdpEchoServerHelper echoServer (9);
 
@@ -69,8 +71,6 @@ int main (int argc, char *argv[])
 	ApplicationContainer clientApps = echoClient.Install (nodes.Get (0));
 	clientApps.Start (Seconds (2.0));
 	clientApps.Stop (Seconds (10.0));
-
-
 
   AnimationInterface anim("Thi.xml");
 
